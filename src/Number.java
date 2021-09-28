@@ -1,74 +1,47 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Number {
 
-    private String inputNumber;
-    private final Map<String, String[]> letterMap = new HashMap<>();
+    private String number;
+    private String[] numberMatchingCharacters;
 
-    public Number(String inputNumber) {
-        this.inputNumber = inputNumber;
-        initializeMap();
+    public Number(final String number) {
+        this.number = number;
+        this.numberMatchingCharacters = LetterMap.getMatchingLettersForNumber(number).clone();
     }
 
-    private void initializeMap() {
-        letterMap.put("0", new String[]{"0"});
-        letterMap.put("1", new String[]{"1"});
-        letterMap.put("2", new String[]{"A", "B", "C"});
-        letterMap.put("3", new String[]{"D", "E", "F"});
-        letterMap.put("4", new String[]{"G", "H", "I"});
-        letterMap.put("5", new String[]{"J", "K", "L"});
-        letterMap.put("6", new String[]{"M", "N", "O"});
-        letterMap.put("7", new String[]{"P", "Q", "R", "S"});
-        letterMap.put("8", new String[]{"T", "U", "V"});
-        letterMap.put("9", new String[]{"W", "X", "Y", "Z"});
-        letterMap.put(null, new String[]{" "});
+    public String getNumber() {
+        return number;
     }
 
-
-    public ArrayList<String[]> initializeLetterArray() {
-
-        ArrayList<String[]> workingArray = new ArrayList<>();
-
-        for (int i = 0; i < inputNumber.length(); i++) {
-            switch (inputNumber.charAt(i)) {
-                case '0':
-                    workingArray.add(letterMap.get("0"));
-                    break;
-                case '1':
-                    workingArray.add(letterMap.get("1"));
-                    break;
-                case '2':
-                    workingArray.add(letterMap.get("2"));
-                    break;
-                case '3':
-                    workingArray.add(letterMap.get("3"));
-                    break;
-                case '4':
-                    workingArray.add(letterMap.get("4"));
-                    break;
-                case '5':
-                    workingArray.add(letterMap.get("5"));
-                    break;
-                case '6':
-                    workingArray.add(letterMap.get("6"));
-                    break;
-                case '7':
-                    workingArray.add(letterMap.get("7"));
-                    break;
-                case '8':
-                    workingArray.add(letterMap.get("8"));
-                    break;
-                case '9':
-                    workingArray.add(letterMap.get("9"));
-                    break;
-                case ' ':
-                    workingArray.add(letterMap.get(null));
-                    break;
-            }
-        }
-
-        return workingArray;
+    public Number setNumber(String number) {
+        this.number = number;
+        return this;
     }
+
+    public String[] getNumberMatchingCharacters() {
+        return numberMatchingCharacters;
+    }
+
+    public Number setNumberMatchingCharacters(String[] numberMatchingCharacters) {
+        this.numberMatchingCharacters = numberMatchingCharacters;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Number number1 = (Number) o;
+        return Objects.equals(number, number1.number) && Arrays.equals(numberMatchingCharacters, number1.numberMatchingCharacters);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(number);
+        result = 31 * result + Arrays.hashCode(numberMatchingCharacters);
+        return result;
+    }
+
 }

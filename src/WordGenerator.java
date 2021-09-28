@@ -1,33 +1,36 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 public class WordGenerator {
 
-
-    public void generate() {
-
-        System.out.print("Please enter your phone number -> ");
-        Scanner scanner = new Scanner(System.in);
-        String inputNumber = scanner.nextLine();
-
+    public List<String> getPossibleLettersCombination(final String inputNumber) {
         //checks if input contains at least one number, and it might contain spaces
         if (inputNumber.matches("^ *[0-9][0-9 ]*$") && inputNumber.length() > 0) {
+            // excluding spaces from input
+            ArrayList<Number> letters = initializeArray(inputNumber);
 
-            Number number = new Number(inputNumber);
-
-            ArrayList<String[]> workingArray = number.initializeLetterArray();
-            printPossibleWords(workingArray);
-
-            System.out.println("End");
+            return generatePossibleWords(letters);
 
         } else {
             throw new InvalidInputException("The input should include numbers from 0 to 9");
         }
     }
 
-    private void printPossibleWords(ArrayList<String[]> letters) {
+    private ArrayList<Number> initializeArray(String inputNumber) {
+        System.out.println("Initializing Working Numbers And Letters  Array");
+        ArrayList<Number> workingArray = new ArrayList<>();
 
+        for (int i = 0; i < inputNumber.length(); i++) {
+            workingArray.add(new Number(String.valueOf(inputNumber.charAt(i))));
+        }
+        System.out.println("Numbers and Letters Array successfully Initialized");
+        return workingArray;
+    }
+
+    private ArrayList<String> generatePossibleWords(ArrayList<Number> letters) {
+        System.out.println("Generating Words");
         // array for indexes
+        ArrayList<String> words = new ArrayList<>();
         int indexArraySize = letters.size();
         int[] indexes = new int[indexArraySize];
 
@@ -37,22 +40,23 @@ public class WordGenerator {
         }
 
         while (true) {
-
+            StringBuilder stringBuilder = new StringBuilder();
             // printing current combinations
             for (int i = 0; i < indexArraySize; i++) {
-                System.out.print(letters.get(i)[indexes[i]]);
+                stringBuilder.append(letters.get(i).getNumberMatchingCharacters()[indexes[i]]);
             }
-            System.out.println();
+            words.add(stringBuilder.toString());
 
             // find array which has the most elements after current element
             int next = indexArraySize - 1;
-            while (next >= 0 && (indexes[next] + 1 >= letters.get(next).length)) {
+            while (next >= 0 && (indexes[next] + 1 >= letters.get(next).getNumberMatchingCharacters().length)) {
                 next--;
             }
 
             // if there is no such an array, you've checked all the arrays
             if (next < 0) {
-                return;
+                System.out.println("Words successfully generated");
+                return words;
             }
 
             // if found move to next element of that array
@@ -63,6 +67,7 @@ public class WordGenerator {
                 indexes[i] = 0;
             }
         }
+
     }
 
 }
